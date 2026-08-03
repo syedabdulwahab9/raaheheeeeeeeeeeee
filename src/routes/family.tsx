@@ -8,6 +8,7 @@ import {
   Plus,
   QrCode,
   RefreshCw,
+  ScanLine,
   Sparkles,
   Trophy,
   Users,
@@ -16,6 +17,7 @@ import {
 import { Card, SectionTitle } from "@/components/AppShell";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuthUser } from "@/lib/use-auth";
+import { QrCodeScanner } from "@/components/QrCodeScanner";
 import {
   ENCOURAGEMENTS,
   PRAYERS,
@@ -229,6 +231,7 @@ function FamilyPage() {
 
   const [familyName, setFamilyName] = useState("");
   const [joinCode, setJoinCode] = useState("");
+  const [scanOpen, setScanOpen] = useState(false);
 
   const mounted = useRef(true);
   useEffect(() => () => void (mounted.current = false), []);
@@ -362,11 +365,12 @@ function FamilyPage() {
     setBusy(false);
   };
 
-  const joinFamily = async () => {
-    if (!joinCode.trim()) return;
+  const joinFamily = async (codeArg?: string) => {
+    const code = (codeArg ?? joinCode).trim();
+    if (!code) return;
     setBusy(true);
     setError(null);
-    const { error: e1 } = await supabase.rpc("join_family_by_code", { _code: joinCode.trim().toUpperCase() });
+    const { error: e1 } = await supabase.rpc("join_family_by_code", { _code: code.toUpperCase() });
     if (e1) {
       setError(friendlyError(e1, "We couldn't join that family circle. Please check the code and try again."));
       setBusy(false);
@@ -442,6 +446,20 @@ function FamilyPage() {
     const code = new URLSearchParams(window.location.search).get("code");
     if (code) setJoinCode(code.toUpperCase());
   }, []);
+
+  /* A scanned QR holds either the invite link or the bare code — both join instantly. */
+  const handleScanned = (text: string) => {
+    let code = text.trim();
+    try {
+      const url = new URL(text);
+      code = url.searchParams.get("code") ?? code;
+    } catch {
+      /* not a URL — treat as a raw code */
+    }
+    code = code.replace(/\s+/g, "").toUpperCase();
+    setJoinCode(code);
+    void joinFamily(code);
+  };
 
   const copyCode = async () => {
     if (!family) return;
@@ -554,17 +572,25 @@ function FamilyPage() {
               />
             </label>
             <button
-              onClick={joinFamily}
+              onClick={() => void joinFamily()}
               disabled={busy || !joinCode.trim()}
               className="flex w-full items-center justify-center gap-2 rounded-xl border border-primary/40 bg-primary/10 px-4 py-3 text-sm font-semibold text-primary disabled:opacity-60"
             >
               {busy && <Loader2 className="size-4 animate-spin" />} Join circle
             </button>
+            <button
+              onClick={() => setScanOpen(true)}
+              className="flex w-full items-center justify-center gap-2 rounded-xl border border-border px-4 py-2.5 text-sm font-semibold transition hover:bg-accent/10"
+            >
+              <ScanLine className="size-4 text-primary" /> Scan QR code
+            </button>
             <p className="text-xs text-muted-foreground">
-              Scanning a QR code from a family member opens this page with the code already filled in.
+              Scan a family member's invite QR and you'll join the circle straight away — full access, nothing else to fill in.
             </p>
           </Card>
         </div>
+
+        <QrCodeScanner open={scanOpen} onClose={() => setScanOpen(false)} onResult={handleScanned} />
       </div>
     );
   }
