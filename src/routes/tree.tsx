@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { BookOpen, Check, Flame, HandHeart, Moon, ShieldCheck, Sparkles, Sun } from "lucide-react";
 import { Card, SectionTitle } from "@/components/AppShell";
+import { HidayahTrail, JannahHouse, SadaqahLake } from "@/components/JourneyBoxes";
 
 export const Route = createFileRoute("/tree")({
   head: () => ({
@@ -132,6 +133,47 @@ function IbadahTree() {
     return out;
   }, [log]);
 
+  const PRAYERS = ["fajr", "dhuhr", "asr", "maghrib", "isha"];
+
+  const todayPrayers = PRAYERS.filter((p) => done.includes(p)).length;
+
+  /* last 7 days, oldest → newest: a stone lights when all 5 prayers were prayed */
+  const trailStones = useMemo(() => {
+    const out: boolean[] = [];
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      const day = log[iso(d)] ?? [];
+      out.push(PRAYERS.every((p) => day.includes(p)));
+    }
+    return out;
+  }, [log]);
+
+  /* every dhikr / sadaqah ever logged becomes a drop in the lake */
+  const deedDrops = useMemo(
+    () => Object.values(log).reduce((n, day) => n + day.filter((h) => h === "dhikr" || h === "sadaqah").length, 0),
+    [log],
+  );
+
+  const milestones = useMemo(() => {
+    const days = Object.values(log);
+    const quran = days.filter((d) => d.includes("quran")).length;
+    const guarded = days.filter((d) => d.includes("haram")).length;
+    const fullPrayerDays = days.filter((d) => PRAYERS.every((p) => d.includes(p))).length;
+    return [
+      { label: "First full day", done: days.some((d) => d.length === HABITS.length) },
+      { label: "3-day streak", done: streak >= 3 },
+      { label: "7 days of Quran", done: quran >= 7 },
+      { label: "10 drops of dhikr", done: deedDrops >= 10 },
+      { label: "7 guarded days", done: guarded >= 7 },
+      { label: "14 full prayer days", done: fullPrayerDays >= 14 },
+      { label: "30-day streak", done: streak >= 30 },
+    ];
+  }, [log, streak, deedDrops]);
+
+  const builtBlocks = milestones.filter((m) => m.done).length;
+
+
   const stage =
     ratio === 0 ? "A quiet seed" : ratio < 0.34 ? "First shoots" : ratio < 0.67 ? "Growing strong" : perfect ? "In full blossom" : "Nearly blooming";
 
@@ -248,6 +290,15 @@ function IbadahTree() {
           </span>
         </div>
       </Card>
+
+      {/* ---------- The Hidayah Trail ---------- */}
+      <HidayahTrail stones={trailStones} todayPrayers={todayPrayers} />
+
+      {/* ---------- The Sadaqah Lake ---------- */}
+      <SadaqahLake deeds={deedDrops} />
+
+      {/* ---------- The House in Jannah ---------- */}
+      <JannahHouse built={builtBlocks} milestones={milestones} />
 
       {/* ---------- Habits ---------- */}
       <Card className="space-y-4">

@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Baby, BrainCircuit, ShieldCheck, CalendarDays, Compass, Dices, HandCoins, Heart, HeartHandshake, ListChecks, Mail, MoonStar, Music4, ScanBarcode, Search, Settings, Shield, Sparkle, Star, TreeDeciduous, Users } from "lucide-react";
+import { Baby, BrainCircuit, ShieldCheck, CalendarDays, Compass, Dices, HandCoins, Heart, HeartHandshake, ListChecks, Mail, MoonStar, Music4, ScanBarcode, Search, Settings, Shield, Footprints, Star, TreeDeciduous, Users } from "lucide-react";
 import { Card, SectionTitle } from "@/components/AppShell";
 import { AiLogo } from "@/components/AiLogo";
 import { CREATORS } from "@/lib/islamic-data";
@@ -31,7 +31,7 @@ const LINKS = [
   { to: "/quiz", label: "Islamic Quiz", icon: BrainCircuit, note: "20 questions — play and learn" },
   { to: "/wheel", label: "Good Deed Wheel", icon: Dices, note: "Spin and do a good deed today" },
   { to: "/qaida", label: "Noorani Qaida", icon: Baby, note: "Animated learning for children" },
-  { to: "/seerah", label: "Seerat un Nabi ﷺ", icon: Sparkle, note: "Timeline, family & ages" },
+  { to: "/seerah", label: "Seerat un Nabi ﷺ", icon: Footprints, note: "Timeline, family & ages" },
   { to: "/calendar", label: "Hijri Calendar", icon: CalendarDays, note: "Islamic months and dates" },
   { to: "/tracker", label: "Salah Tracker", icon: ListChecks, note: "A full year of prayers with backup" },
   { to: "/tree", label: "The Ibadah Tree", icon: TreeDeciduous, note: "Grow leaves & blossoms with every deed" },

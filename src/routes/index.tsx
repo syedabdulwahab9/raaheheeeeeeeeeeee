@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import {
   BookOpen, Compass, Ellipsis, Heart, ListChecks, MessageCircleHeart, Scroll,
-  Sparkle, Star, Baby, CalendarDays, BookMarked, LayoutGrid, TreeDeciduous, Users,
+  Footprints, Star, Baby, CalendarDays, BookMarked, LayoutGrid, TreeDeciduous, Users,
 } from "lucide-react";
 import { Card } from "@/components/AppShell";
 import { AiLogo } from "@/components/AiLogo";
@@ -36,7 +36,7 @@ const QUICK = [
   { to: "/tasbeeh", label: "Tasbeeh", icon: ListChecks, note: "Digital counter" },
   { to: "/duas", label: "Duas", icon: Heart, note: "With meaning" },
   { to: "/qaida", label: "Noorani Qaida", icon: Baby, note: "Learn to read" },
-  { to: "/seerah", label: "Seerat un Nabi ﷺ", icon: Sparkle, note: "Life & family" },
+  { to: "/seerah", label: "Seerat un Nabi ﷺ", icon: Footprints, note: "Life & family" },
   { to: "/calendar", label: "Hijri Calendar", icon: CalendarDays, note: "Islamic dates" },
   { to: "/tree", label: "Ibadah Tree", icon: TreeDeciduous, note: "Grow with every deed" },
   { to: "/tracker", label: "Salah Tracker", icon: MessageCircleHeart, note: "Daily habit" },
