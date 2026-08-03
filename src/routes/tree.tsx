@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { BookOpen, Check, Flame, HandHeart, Moon, ShieldCheck, Sparkles, Sun } from "lucide-react";
 import { Card, SectionTitle } from "@/components/AppShell";
+import { HidayahTrail, JannahHouse, SadaqahLake } from "@/components/JourneyBoxes";
 
 export const Route = createFileRoute("/tree")({
   head: () => ({
