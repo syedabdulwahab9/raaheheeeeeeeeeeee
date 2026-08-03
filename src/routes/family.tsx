@@ -8,6 +8,7 @@ import {
   Plus,
   QrCode,
   RefreshCw,
+  ScanLine,
   Sparkles,
   Trophy,
   Users,
