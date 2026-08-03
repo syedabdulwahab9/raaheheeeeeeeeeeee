@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { Loader2, Mail, ShieldCheck } from "lucide-react";
 import { Card } from "@/components/AppShell";
 import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable/index";
 import { useAuthUser } from "@/lib/use-auth";
 
 export const Route = createFileRoute("/auth")({
@@ -129,15 +128,6 @@ function AuthPage() {
     }
   };
 
-  const google = async () => {
-    setError(null);
-    if (typeof window !== "undefined") window.sessionStorage.setItem(NEXT_KEY, destination);
-    const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: `${window.location.origin}/auth?next=${encodeURIComponent(destination)}`,
-    });
-    if (result.error) setError("Google sign-in failed. Please try again.");
-  };
-
   if (loading || user) {
     return (
       <div className="flex min-h-[50vh] items-center justify-center text-muted-foreground">
@@ -162,21 +152,6 @@ function AuthPage() {
       </div>
 
       <Card className="space-y-4">
-        <button
-          type="button"
-          onClick={google}
-          className="flex w-full items-center justify-center gap-3 rounded-xl border border-border bg-background px-4 py-3 text-sm font-semibold transition hover:bg-accent/10"
-        >
-          <svg viewBox="0 0 24 24" className="size-4" aria-hidden>
-            <path fill="#EA4335" d="M12 10.2v3.9h5.5c-.24 1.4-1.7 4.1-5.5 4.1A6.2 6.2 0 1 1 12 5.8c1.8 0 3 .77 3.7 1.43l2.5-2.4A9.6 9.6 0 1 0 12 21.6c5.5 0 9.2-3.9 9.2-9.4 0-.63-.07-1.1-.16-1.6H12Z" />
-          </svg>
-          Continue with Google
-        </button>
-
-        <div className="flex items-center gap-3 text-[11px] uppercase tracking-[0.25em] text-muted-foreground">
-          <span className="h-px flex-1 bg-border" /> or <span className="h-px flex-1 bg-border" />
-        </div>
-
         <form onSubmit={submit} className="space-y-3">
           {mode === "signup" && (
             <label className="block text-sm">
