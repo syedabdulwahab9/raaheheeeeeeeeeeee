@@ -14,13 +14,202 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      daily_progress: {
+        Row: {
+          day: string
+          dhikr: number
+          prayers: string[]
+          quran_pages: number
+          streak: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          day: string
+          dhikr?: number
+          prayers?: string[]
+          quran_pages?: number
+          streak?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          day?: string
+          dhikr?: number
+          prayers?: string[]
+          quran_pages?: number
+          streak?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      encouragements: {
+        Row: {
+          created_at: string
+          family_id: string
+          from_user: string
+          id: string
+          message: string
+          to_user: string
+        }
+        Insert: {
+          created_at?: string
+          family_id: string
+          from_user: string
+          id?: string
+          message: string
+          to_user: string
+        }
+        Update: {
+          created_at?: string
+          family_id?: string
+          from_user?: string
+          id?: string
+          message?: string
+          to_user?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "encouragements_family_id_fkey"
+            columns: ["family_id"]
+            isOneToOne: false
+            referencedRelation: "families"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      families: {
+        Row: {
+          created_at: string
+          created_by: string
+          id: string
+          invite_code: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          id?: string
+          invite_code: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          id?: string
+          invite_code?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      family_members: {
+        Row: {
+          family_id: string
+          hide_prayer_times: boolean
+          id: string
+          joined_at: string
+          role: string
+          share_dhikr: boolean
+          share_last_active: boolean
+          share_quran: boolean
+          share_salah: boolean
+          share_streak: boolean
+          user_id: string
+        }
+        Insert: {
+          family_id: string
+          hide_prayer_times?: boolean
+          id?: string
+          joined_at?: string
+          role?: string
+          share_dhikr?: boolean
+          share_last_active?: boolean
+          share_quran?: boolean
+          share_salah?: boolean
+          share_streak?: boolean
+          user_id: string
+        }
+        Update: {
+          family_id?: string
+          hide_prayer_times?: boolean
+          id?: string
+          joined_at?: string
+          role?: string
+          share_dhikr?: boolean
+          share_last_active?: boolean
+          share_quran?: boolean
+          share_salah?: boolean
+          share_streak?: boolean
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "family_members_family_id_fkey"
+            columns: ["family_id"]
+            isOneToOne: false
+            referencedRelation: "families"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          display_name: string
+          id: string
+          last_active: string
+        }
+        Insert: {
+          created_at?: string
+          display_name?: string
+          id: string
+          last_active?: string
+        }
+        Update: {
+          created_at?: string
+          display_name?: string
+          id?: string
+          last_active?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      create_family: {
+        Args: { _name: string }
+        Returns: {
+          created_by: string
+          id: string
+          invite_code: string
+          name: string
+        }[]
+      }
+      get_family_progress: {
+        Args: { _since: string }
+        Returns: {
+          day: string
+          dhikr: number
+          prayers: string[]
+          quran_pages: number
+          streak: number
+          updated_at: string
+          user_id: string
+        }[]
+      }
+      is_family_member: {
+        Args: { _family_id: string; _user_id: string }
+        Returns: boolean
+      }
+      join_family_by_code: { Args: { _code: string }; Returns: string }
+      peek_family_by_code: { Args: { _code: string }; Returns: string }
+      shares_family_with: {
+        Args: { _other: string; _user_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never
