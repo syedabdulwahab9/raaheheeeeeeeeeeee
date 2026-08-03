@@ -249,6 +249,15 @@ function IbadahTree() {
         </div>
       </Card>
 
+      {/* ---------- The Hidayah Trail ---------- */}
+      <HidayahTrail stones={trailStones} todayPrayers={todayPrayers} />
+
+      {/* ---------- The Sadaqah Lake ---------- */}
+      <SadaqahLake deeds={deedDrops} />
+
+      {/* ---------- The House in Jannah ---------- */}
+      <JannahHouse built={builtBlocks} milestones={milestones} />
+
       {/* ---------- Habits ---------- */}
       <Card className="space-y-4">
         <div>
